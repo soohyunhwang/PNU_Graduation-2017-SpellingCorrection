@@ -113,7 +113,6 @@ embedding_size = 128  # Dimension of the embedding vector.
 skip_window = 1       # How many words to consider left and right.
 num_skips = 2           # How many times to reuse an input to generate a label. (context, target)쌍의 갯수
 #skip window를 통해 결정된 좌우 비교할 단어들 중 모두를 다 뽑아서 target과 비교할 수도 있고 일부만 뽑아서 비교할 수도 있기 때문에 skipwindow와 따로있는것
-
 # We pick a random validation set to sample nearest neighbors. Here we limit the
 # validation samples to the words that have a low numeric ID, which by
 # construction are also the most frequent.
@@ -204,6 +203,7 @@ with tf.Session(graph=graph) as session:
           log_str = "%s %s," % (log_str, close_word)
         print(log_str)
   final_embeddings = normalized_embeddings.eval()   #nomalized_embeddings를 rnn의 input으로 넣는다
+
 
 # Step 6: embeddings을 시각화한다.
 
