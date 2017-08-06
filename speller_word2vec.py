@@ -5,6 +5,8 @@ from __future__ import print_function
 import pickle
 import numpy as np
 import tensorflow as tf
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 vocabulary_size = 430000
 embedding_size = 128  # Dimension of the embedding vector.
@@ -14,7 +16,7 @@ window_size = 2
 with open('./model/word2vec_dic', 'rb') as f:
   dictionary = pickle.load(f)
 
-with open('./test_data/기본_태깅_오류.txt', 'r') as f:
+with open('./test_data/기본_태깅_오류.txt', 'r' ,encoding='utf8') as f:
   input_text_list = f.readlines()
 
 embeddings = tf.Variable(
@@ -26,7 +28,6 @@ init = tf.global_variables_initializer()
 
 with tf.Session() as session:
   init.run()
-
   saver = tf.train.Saver()
   saver.restore(session, './model/word2vec.ckpf')
   embedding_vec = normalized_embeddings.eval()
@@ -60,10 +61,12 @@ with tf.Session() as session:
                   cand_simiarity = tf.matmul(cand_vec, context_vec, transpose_b=True)
               total_target_sim += target_similarity.eval()
               total_cand_sim += cand_simiarity.eval()
-          if(total_cand_sim > total_target_sim):
+          if(total_target_sim > total_cand_sim):
             detect_count += 1
           total_count += 1
           break
 
+
   print('Detection Rate: ', detect_count / total_count * 100)
+
 
